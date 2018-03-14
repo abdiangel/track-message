@@ -3,10 +3,25 @@ document.addEventListener("DOMContentLoaded", function(event) {
   const close = document.getElementById("TrackMessageCookieNotification_Id--close-5644");
   var url;
   
+  // Takes the value from checkbox policy_link to decide if it will apply policyTabSelector
+
   const targetSelector= function(){
     if ( phpValues.policyLink == 1 ){
       url = document.getElementById('TrackMessageCookieNotification__url-Id--2443');
       policyTabSelector();
+    }
+  }
+
+  // If the user checked the optional header this will display his custom header or default header
+
+  const mssgHeader = function(){
+    if (phpValues.mssgHeaderSelector == 1){
+      var headerText = phpValues.mssgHeaderText;
+      var header = document.createElement("h5");
+      header.setAttribute("class","TrackMessageCookieNotification__header");
+      var text = document.createTextNode(headerText);
+      header.appendChild(text);
+      element.insertBefore(header, element.childNodes[0]);
     }
   }
 
@@ -21,6 +36,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   const rmClass = function(){
     element.style.removeProperty('display');
   }
+
+  // Takes the values from policy_tab_selector to determine the current attribute
 
   const policyTabSelector = function(){
     switch ( phpValues.tabSelector ) {
@@ -167,6 +184,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     trackMssgPosition();
     openTrackMssg();
     targetSelector();
+    mssgHeader();
   }
   const loadSettings = function(){
     closeSettings();
@@ -185,15 +203,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
   //Setting cookie
   var setCookie = function(){
     var cookieName = 'UserFirstTime';
-    var cookieValue = '1';
+    var cookieValue = (phpValues.cookieVersion);
     var myDate = new Date();
-    var cookieTime = parseInt(phpValues.cookie);
+    var cookieTime = parseInt(phpValues.cookieTime);
     //Cookie duration
     myDate.setMonth(myDate.getMonth() + cookieTime);
-    //Check if cookie is setted to not reset the cookie.
+    //Getting cookie data
     var cookie= getCookie("UserFirstTime");
     //Checking cookie value
-      if (!cookie  == '1'){
+      if (cookie  != cookieValue){
         document.cookie = cookieName +"=" + cookieValue + ";expires=" + myDate 
         + ";path=/";
       }
