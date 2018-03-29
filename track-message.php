@@ -42,6 +42,7 @@ class TrackMessage{
     private $message_header;
     private $message_header_text;
     private $cookie_value;
+    private $header_color;
 
 
 
@@ -62,6 +63,7 @@ class TrackMessage{
         $this->policy_page = (isset($this->content_options['policy_page'])) ? $this->content_options['policy_page'] : 'None';
         $this->message_header = (isset($this->content_options['select_message_header'])) ? $this->content_options['select_message_header'] : 0;
         $this->cookie_value = (isset($_COOKIE['UserFirstTime'])) ? $_COOKIE['UserFirstTime'] : 0;
+        $this->header_color = ( isset($this->styles_options['header_color']) && $this->styles_options['header_color'] != "" ) ? sanitize_text_field( $this->styles_options['header_color'] ) : '#000000';
         
         $this->policy_tab_selector_settings = array(
             '_blank'    => __('New Tab', 'track-message'),
@@ -180,7 +182,8 @@ class TrackMessage{
             'mandatoryAccept'=> $this->mandatory_accept,
             'mssgHeaderSelector' => $this->message_header,
             'mssgHeaderText' => $this->message_header_text,
-            'cookieVersion' => $this->general_options['cookie_version']
+            'cookieVersion' => $this->general_options['cookie_version'],
+            'headerColor' => $this->header_color
         );               
         
         if (is_admin()){
@@ -570,6 +573,28 @@ class TrackMessage{
             'tmssg_styles', 
             'tmssg_styles_tab'
         );
+
+        // Header color settings
+
+        add_settings_field(
+            'header_color',
+            __( 'Header Color', 'track-message'  ),
+            array( $this, 'headerColorInput' ),
+            'tmssg_styles', 
+            'tmssg_styles_tab'
+        );
+
+        // Url color settings
+
+        add_settings_field(
+            'url_color',
+            __( 'Url Color', 'track-message'  ),
+            array( $this, 'urlColorInput' ),
+            'tmssg_styles', 
+            'tmssg_styles_tab'
+        );        
+
+
         $options = get_option ('tmssg_styles_options');
             if (false === $options) {
                 // Default array.
@@ -614,7 +639,9 @@ class TrackMessage{
             'color'                 => '#000000',
             'background_color'      => '#ffffff',
             'btn_color'             => '#000000',
-            'background_btn_color'  => '#ffffff'
+            'background_btn_color'  => '#ffffff',
+            'header_color'          => '#000000',
+            'url_color'             => '#317dbf'
         );
         return $defaults;
     }
@@ -912,12 +939,38 @@ class TrackMessage{
         echo $html;
     }
 
+    public function headerColorInput(){
+        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $class_paragraph = ('description');
+        $class = ('TrackMessageNotification__content--edit-color');
+        $name = ('tmssg_styles_options[header_color]');
+        $type = ('text');
+        
+        $html = sprintf('<input class="%s" name="%s" type="%s" value="'. esc_attr($this->header_color) .'" />', esc_attr($class), esc_attr($name), esc_attr($type));
+        $html .= sprintf('<p class="%s">%s<p>', esc_attr($class_paragraph), esc_html($text));
+        echo $html;
+    }
+
+    public function urlColorInput(){
+        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $class_paragraph = ('description');
+        $color = ( isset($this->styles_options['url_color']) && $this->styles_options['url_color'] != "" ) ? sanitize_text_field( $this->styles_options['url_color'] ) : '#317dbf';
+        $class = ('TrackMessageNotification__content--edit-color');
+        $name = ('tmssg_styles_options[url_color]');
+        $type = ('text');
+        
+        $html = sprintf('<input class="%s" name="%s" type="%s" value="'. esc_attr($color) .'" />', esc_attr($class), esc_attr($name), esc_attr($type));
+        $html .= sprintf('<p class="%s">%s<p>', esc_attr($class_paragraph), esc_html($text));
+        echo $html;
+    }
+
     // Show the message. 
     public function tmssgShowMessage(){
         $btn_color_applied = ('color :'.$this->styles_options['btn_color'].';');
         $btn_background_color_applied = ('background-color :'.$this->styles_options['background_btn_color'].';');
         $background_color_applied = ('background-color :'.$this->styles_options['background_color'].';');
         $color_applied = ('color :'.$this->styles_options['color'].';');
+        $url_color_applied = ('color :'.$this->styles_options['url_color'].';');
         $id_button = ('TrackMessageCookieNotification_Id--close-5644');
         $class_button = ('TrackMessageCookieNotification__inline--btn');
         $id = ('TrackMessageCookieNotification_Id--3455');
@@ -928,10 +981,10 @@ class TrackMessage{
         $html = sprintf('<div style="%s %s %s" id="%s">', esc_attr($color_applied), esc_attr($background_color_applied), esc_attr($ready_to_js), esc_attr($id));
         if ($this->policy_link == 1 && $this->policy_page == 'None' ) {
             $html.= sprintf('<p>%s</p>', esc_html__($this->message,'track-message'));
-            $html.= sprintf('<a id="%s" href="%s">%s</a>', esc_attr($id_url),esc_url($this->cookie_policy_url),esc_html__($this->cookie_policy_link));
+            $html.= sprintf('<a id="%s" href="%s" style ="%s">%s</a>', esc_attr($id_url),esc_url($this->cookie_policy_url),esc_attr($url_color_applied),esc_html__($this->cookie_policy_link));
         } else if ( $this->policy_link == 1 && $this->policy_page !== 'None'){
             $html.= sprintf('<p>%s</p>', esc_html__($this->message,'track-message'));
-            $html.= sprintf('<a id="%s" href="%s">%s</a>',esc_attr($id_url),esc_url(get_the_permalink($this->policy_page)),esc_html__($this->cookie_policy_link));
+            $html.= sprintf('<a id="%s" href="%s" style="%s">%s</a>',esc_attr($id_url),esc_url(get_the_permalink($this->policy_page)),esc_attr($url_color_applied),esc_html__($this->cookie_policy_link));
         } else {
             $html.= sprintf('<p>%s</p>', esc_html__($this->message,'track-message'));
         }
