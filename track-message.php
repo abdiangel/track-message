@@ -44,6 +44,7 @@ class TrackMessage{
     private $cookie_value;
     private $header_color;
     private $dropshadow_selector;
+    private $roundedcorners_selector;
 
 
 
@@ -66,6 +67,7 @@ class TrackMessage{
         $this->cookie_value = (isset($_COOKIE['UserFirstTime'])) ? $_COOKIE['UserFirstTime'] : 0;
         $this->header_color = ( isset($this->styles_options['header_color']) && $this->styles_options['header_color'] != "" ) ? sanitize_text_field( $this->styles_options['header_color'] ) : '#000000';
         $this->dropshadow_selector = (isset($this->styles_options['dropshadow_selector'])) ? $this->styles_options['dropshadow_selector'] : 0;
+        $this->roundedcorners_selector = (isset($this->styles_options['roundedcorners_selector'])) ? $this->styles_options['roundedcorners_selector'] : 0;
         
         $this->policy_tab_selector_settings = array(
             '_blank'    => __('New Tab', 'track-message'),
@@ -186,7 +188,8 @@ class TrackMessage{
             'mssgHeaderText' => $this->message_header_text,
             'cookieVersion' => $this->general_options['cookie_version'],
             'headerColor' => $this->header_color,
-            'dropShadow' => $this->dropshadow_selector
+            'dropShadow' => $this->dropshadow_selector,
+            'roundedCorners' => $this->roundedcorners_selector
         );               
         
         if (is_admin()){
@@ -533,7 +536,7 @@ class TrackMessage{
             'tmssg_styles_tab'
         );
 
-        // Optional Effects
+        /* Optional Effects ------------------ */
 
         // Drop Shadow
 
@@ -545,6 +548,19 @@ class TrackMessage{
             'tmssg_styles', 
             'tmssg_styles_tab'
         );
+
+        // Rounded Corners
+
+        add_settings_field(
+            'roundedcorners_selector', 
+            __('Do you want round corners for message container?', 
+            'track-message'), 
+            array( $this,'roundedCornersSelector'), 
+            'tmssg_styles', 
+            'tmssg_styles_tab'
+        );
+
+        /* ------------------------------------------- */
      
 
         //Color Picker - Design
@@ -649,16 +665,17 @@ class TrackMessage{
     }
     public function stylesDefaultSettings() {
         $defaults = array (
-            'positions'				=> 'position_bottom',
-            'close_view'			=> 'none',
-            'open_view'				=> 'none',
-            'dropshadow_selector'   =>  0,
-            'color'                 => '#000000',
-            'background_color'      => '#ffffff',
-            'btn_color'             => '#000000',
-            'background_btn_color'  => '#ffffff',
-            'header_color'          => '#000000',
-            'url_color'             => '#317dbf'
+            'positions'				    => 'position_bottom',
+            'close_view'			    => 'none',
+            'open_view'				    => 'none',
+            'dropshadow_selector'       =>  0,
+            'roundedcorners_selector'   =>  0,
+            'color'                     => '#000000',
+            'background_color'          => '#ffffff',
+            'btn_color'                 => '#000000',
+            'background_btn_color'      => '#ffffff',
+            'header_color'              => '#000000',
+            'url_color'                 => '#317dbf'
         );
         return $defaults;
     }
@@ -904,6 +921,19 @@ class TrackMessage{
         $value = ('1');
         $checked =  checked( ! empty ( $this->styles_options['dropshadow_selector'] ), 1, false );
         $name = ('tmssg_styles_options[dropshadow_selector]');      
+        $html = sprintf('<input type="%s" name="%s" %s value="%s">
+        ',esc_attr($type), esc_attr($name), esc_attr($checked), esc_attr($value));
+        $html .= sprintf('<p class="%s">%s<p>', esc_attr($class), esc_html($text));
+        echo $html; 
+    }
+
+    public function roundedCornersSelector(){
+        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $class = ('description');
+        $type = ('checkbox');
+        $value = ('1');
+        $checked =  checked( ! empty ( $this->styles_options['roundedcorners_selector'] ), 1, false );
+        $name = ('tmssg_styles_options[roundedcorners_selector]');      
         $html = sprintf('<input type="%s" name="%s" %s value="%s">
         ',esc_attr($type), esc_attr($name), esc_attr($checked), esc_attr($value));
         $html .= sprintf('<p class="%s">%s<p>', esc_attr($class), esc_html($text));

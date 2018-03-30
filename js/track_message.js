@@ -35,6 +35,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   }
 
+  // Rounded Corners for message container
+
+  const roundedCorners = function(){
+    if (phpValues.roundedCorners == 1){
+      element.classList.add('TrackMessageNotification--rounded-corners');
+    }
+
+  }
+
   // Gives the necessary styles so the message looks elegant
 
   const initClasses = function() {
@@ -196,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     targetSelector();
     mssgHeader();
     dropShadowSelector();
+    roundedCorners();
   }
   const loadSettings = function(){
     closeSettings();
