@@ -45,6 +45,7 @@ class TrackMessage{
     private $header_color;
     private $dropshadow_selector;
     private $roundedcorners_selector;
+    private $text_align_settings;
 
 
 
@@ -145,7 +146,14 @@ class TrackMessage{
 			'fade'	 			=> __( 'Fade', 'track-message' ),
             'slide'	 			=> __( 'Slide', 'track-message' ),
             'fade-slide'	 	=> __( 'Fade & Slide', 'track-message' )
-		);
+        );
+        
+        $this->text_align_settings = array(
+            'center'            => __('Center', 'track-message'),
+            'left'            => __('Left', 'track-message'),
+            'right'            => __('Right', 'track-message'),
+            'justify'            => __('Justify', 'track-message')
+        );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'myScripts'));
         add_action( 'admin_menu', array( $this, 'tmssgPluginMenu'));
@@ -189,7 +197,8 @@ class TrackMessage{
             'cookieVersion' => $this->general_options['cookie_version'],
             'headerColor' => $this->header_color,
             'dropShadow' => $this->dropshadow_selector,
-            'roundedCorners' => $this->roundedcorners_selector
+            'roundedCorners' => $this->roundedcorners_selector,
+            'textAlign' => $this->styles_options['text_align']
         );               
         
         if (is_admin()){
@@ -536,6 +545,16 @@ class TrackMessage{
             'tmssg_styles_tab'
         );
 
+        // Text Align
+        add_settings_field(
+            'text_align', 
+            __('How do you want the message text to be aligned?', 
+            'track-message'), 
+            array( $this,'textAlignSelector'), 
+            'tmssg_styles', 
+            'tmssg_styles_tab'
+        );
+
         /* Optional Effects ------------------ */
 
         // Drop Shadow
@@ -668,6 +687,7 @@ class TrackMessage{
             'positions'				    => 'position_bottom',
             'close_view'			    => 'none',
             'open_view'				    => 'none',
+            'text_align'                => 'center',
             'dropshadow_selector'       =>  0,
             'roundedcorners_selector'   =>  0,
             'color'                     => '#000000',
@@ -912,6 +932,19 @@ class TrackMessage{
         $html .= ('</select>');
         $html .= sprintf('<p class="%s">%s<p>', esc_attr($class), esc_html($text));
         echo $html;     
+    }
+
+    public function textAlignSelector(){
+        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $class = ('description');
+        $html = sprintf('<select name="%s">', esc_attr('tmssg_styles_options[text_align]'));
+        foreach($this->text_align_settings as $key => $value)
+        {
+            $html .= sprintf('<option value="%s"'.selected(esc_attr($this->styles_options['text_align']), esc_attr($key), false).'>%s</option>', esc_attr($key), esc_html($value));
+        }
+        $html .= ('</select>');
+        $html .= sprintf('<p class="%s">%s<p>', esc_attr($class), esc_html($text));
+        echo $html;          
     }
 
     public function dropShadowSelector(){
