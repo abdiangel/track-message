@@ -25,8 +25,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
   const mssgHeader = function(){
     if (phpValues.mssgHeaderSelector == 1){
       var headerText = phpValues.mssgHeaderText;
+      var headerColor = phpValues.headerColor;
       var header = document.createElement("h1");
       header.setAttribute("class","TrackMessageCookieNotification__header");
+      header.setAttribute("style","color:" + headerColor + ";");
       var text = document.createTextNode(headerText);
       header.appendChild(text);
       element.insertBefore(header, element.childNodes[0]);
