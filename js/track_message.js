@@ -12,6 +12,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   }
 
+  // DropShadow
+
+  const dropShadowSelector = function(){
+    if ( phpValues.dropShadow == 1 ){
+      element.classList.add('TrackMessageNotification--drop-shadow')
+    }
+  }
+
   // If the user checked the optional header this will display his custom header or default header
 
   const mssgHeader = function(){
@@ -185,6 +193,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     openTrackMssg();
     targetSelector();
     mssgHeader();
+    dropShadowSelector();
   }
   const loadSettings = function(){
     closeSettings();

@@ -43,6 +43,7 @@ class TrackMessage{
     private $message_header_text;
     private $cookie_value;
     private $header_color;
+    private $dropshadow_selector;
 
 
 
@@ -64,6 +65,7 @@ class TrackMessage{
         $this->message_header = (isset($this->content_options['select_message_header'])) ? $this->content_options['select_message_header'] : 0;
         $this->cookie_value = (isset($_COOKIE['UserFirstTime'])) ? $_COOKIE['UserFirstTime'] : 0;
         $this->header_color = ( isset($this->styles_options['header_color']) && $this->styles_options['header_color'] != "" ) ? sanitize_text_field( $this->styles_options['header_color'] ) : '#000000';
+        $this->dropshadow_selector = (isset($this->styles_options['dropshadow_selector'])) ? $this->styles_options['dropshadow_selector'] : 0;
         
         $this->policy_tab_selector_settings = array(
             '_blank'    => __('New Tab', 'track-message'),
@@ -183,7 +185,8 @@ class TrackMessage{
             'mssgHeaderSelector' => $this->message_header,
             'mssgHeaderText' => $this->message_header_text,
             'cookieVersion' => $this->general_options['cookie_version'],
-            'headerColor' => $this->header_color
+            'headerColor' => $this->header_color,
+            'dropShadow' => $this->dropshadow_selector
         );               
         
         if (is_admin()){
@@ -441,7 +444,7 @@ class TrackMessage{
                 
         add_settings_field ( 
             'policy_page', 
-            __( 'Cookie Policy Info Page', 'uk-cookie-consent' ), 
+            __( 'Cookie Policy Info Page', 'track-message' ), 
             array ( $this, 'policyPageCallback' ),
             'tmssg_content', 
             'tmssg_content_tab'
@@ -526,6 +529,19 @@ class TrackMessage{
             __('How do you want the message to be closed?', 
             'track-message'), 
             array( $this,'closeView'), 
+            'tmssg_styles', 
+            'tmssg_styles_tab'
+        );
+
+        // Optional Effects
+
+        // Drop Shadow
+
+        add_settings_field(
+            'dropshadow_selector', 
+            __('Do you want a drop shadow effect for message container?', 
+            'track-message'), 
+            array( $this,'dropShadowSelector'), 
             'tmssg_styles', 
             'tmssg_styles_tab'
         );
@@ -636,6 +652,7 @@ class TrackMessage{
             'positions'				=> 'position_bottom',
             'close_view'			=> 'none',
             'open_view'				=> 'none',
+            'dropshadow_selector'   =>  0,
             'color'                 => '#000000',
             'background_color'      => '#ffffff',
             'btn_color'             => '#000000',
@@ -880,6 +897,19 @@ class TrackMessage{
         echo $html;     
     }
 
+    public function dropShadowSelector(){
+        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $class = ('description');
+        $type = ('checkbox');
+        $value = ('1');
+        $checked =  checked( ! empty ( $this->styles_options['dropshadow_selector'] ), 1, false );
+        $name = ('tmssg_styles_options[dropshadow_selector]');      
+        $html = sprintf('<input type="%s" name="%s" %s value="%s">
+        ',esc_attr($type), esc_attr($name), esc_attr($checked), esc_attr($value));
+        $html .= sprintf('<p class="%s">%s<p>', esc_attr($class), esc_html($text));
+        echo $html; 
+    }
+
     
     public function optionsSettingsText(){
         echo '<p>' . esc_html_e( 'Use the color picker below to choose the color of your message', 'track-message'  ) . '</p>';
@@ -981,10 +1011,10 @@ class TrackMessage{
         $html = sprintf('<div style="%s %s %s" id="%s">', esc_attr($color_applied), esc_attr($background_color_applied), esc_attr($ready_to_js), esc_attr($id));
         if ($this->policy_link == 1 && $this->policy_page == 'None' ) {
             $html.= sprintf('<p>%s</p>', esc_html__($this->message,'track-message'));
-            $html.= sprintf('<a id="%s" href="%s" style ="%s">%s</a>', esc_attr($id_url),esc_url($this->cookie_policy_url),esc_attr($url_color_applied),esc_html__($this->cookie_policy_link));
+            $html.= sprintf('<a id="%s" href="%s" style ="%s">%s</a>', esc_attr($id_url),esc_url($this->cookie_policy_url),esc_attr($url_color_applied),esc_html__($this->cookie_policy_link, 'track-message'));
         } else if ( $this->policy_link == 1 && $this->policy_page !== 'None'){
             $html.= sprintf('<p>%s</p>', esc_html__($this->message,'track-message'));
-            $html.= sprintf('<a id="%s" href="%s" style="%s">%s</a>',esc_attr($id_url),esc_url(get_the_permalink($this->policy_page)),esc_attr($url_color_applied),esc_html__($this->cookie_policy_link));
+            $html.= sprintf('<a id="%s" href="%s" style="%s">%s</a>',esc_attr($id_url),esc_url(get_the_permalink($this->policy_page)),esc_attr($url_color_applied),esc_html__($this->cookie_policy_link, 'track-message'));
         } else {
             $html.= sprintf('<p>%s</p>', esc_html__($this->message,'track-message'));
         }
