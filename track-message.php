@@ -397,29 +397,38 @@ class TrackMessage{
         }
     }
     public function contentSettingsInit(){
+        // Content Settings
         register_setting( 
             'tmssg_content', 
             'tmssg_content_options'
         ); 
+
+        //General Settings Tab 
         add_settings_section( 
             'tmssg_content_tab', 
             __('Content Settings',
             'track-message'), 
             false, 
             'tmssg_content' 
-        );   
+        );
+
+        // Field that saves the message
         add_settings_field( 
             'message_field',
             __('Write the message', 'track-message'), 
             array( $this, 'mssgFieldCallback' ), 
             'tmssg_content', 'tmssg_content_tab' 
         );
+
+        // Field that saves if you want to show a Header
         add_settings_field( 
             'select_message_header',
             __('Check if you want to show a header in your message', 'track-message'), 
             array( $this, 'selectHeaderFieldCallback' ), 
             'tmssg_content', 'tmssg_content_tab' 
         );
+
+        // Field that saves message in Header
         add_settings_field( 
             'message_header_field',
             __('Write the header', 'track-message'), 
@@ -494,11 +503,12 @@ class TrackMessage{
 
     public function stylesSettingsInit(){
 
-        //Position - Design
+        // Styles Settings
         register_setting(
             'tmssg_styles', 
             'tmssg_styles_options');
 
+        // Style settings tab
         add_settings_section(
             'tmssg_styles_tab', 
             __('Styles Settings','track-message'), 
@@ -506,6 +516,7 @@ class TrackMessage{
             'tmssg_styles'
         );
 
+        // Selects the position for message
         add_settings_field(
             'positions', 
             __('Where do you want your message to show up?', 
@@ -528,12 +539,6 @@ class TrackMessage{
             'tmssg_styles_tab'
         );
 
-        add_settings_section(
-            'view_section', 
-            __('View Settings','track-message'), 
-            false, 
-            'tmssg_styles_tab'
-        );
 
         // Close View
         add_settings_field(
@@ -591,6 +596,7 @@ class TrackMessage{
             'tmssg_styles_tab'
         );
           
+        // Select the color for your message
         add_settings_field(
             'color',
             __( 'Text color', 'track-message'  ),
@@ -599,7 +605,7 @@ class TrackMessage{
             'tmssg_styles_tab'
         );
 
-          
+        // Select the color for your message Background
         add_settings_field(
             'background_color',
             __( 'Background Color', 'track-message'  ),
@@ -616,7 +622,8 @@ class TrackMessage{
             'tmssg_styles', 
             'tmssg_styles_tab'
         );
-          
+        
+        //Selects the color of the button background
         add_settings_field(
             'background_btn_color',
             __( 'Button Background Color', 'track-message'  ),
@@ -645,7 +652,6 @@ class TrackMessage{
             'tmssg_styles_tab'
         );        
 
-
         $options = get_option ('tmssg_styles_options');
             if (false === $options) {
                 // Default array.
@@ -655,6 +661,7 @@ class TrackMessage{
     } 
 
     // Defaults Settings.
+    // Default General Settings
     public function generalDefaultSettings() {
         $defaults = array (
             'close_settings'				=>	'click',
@@ -669,6 +676,7 @@ class TrackMessage{
         return $defaults;
     }
 
+    // Default Content Settings
     public function contentDefaultSettings() {
         $defaults = array (
             'message_field'				=>	__('We use cookies in our site to add custom functions. Continuing browsing accepts our cookies policy', 'track-message'),
@@ -682,6 +690,8 @@ class TrackMessage{
         );
         return $defaults;
     }
+
+    // Default Styles settings
     public function stylesDefaultSettings() {
         $defaults = array (
             'positions'				    => 'position_bottom',
@@ -701,8 +711,10 @@ class TrackMessage{
     }
     
     // Callbacks Functions.
+
+    // Select how the message will close example: On Click
     public function closeCallback(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Message will close on the given event', 'track-message');
         $class = ('description');
         $html = sprintf('<select name="%s">', esc_attr('tmssg_general_options[close_settings]'));
         foreach($this->close_settings as $key => $value)
@@ -714,8 +726,10 @@ class TrackMessage{
         $html .= sprintf('<p class="%s">%s<p>', esc_attr($class), esc_html($text));
         echo $html;      
     }
+
+    // This tells the version of your actual cookie terms
     public function cookieVersionCallback(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Version of your Cookie', 'track-message');
         $class = ('description');
         $name = ('tmssg_general_options[cookie_version]');
         $type = ('number');
@@ -726,8 +740,10 @@ class TrackMessage{
 
         echo $html;
     }
+
+    // If u dont click the button the message will continue appearing
     public function mandatoryAcceptCallback() {
-        $text = __('If you check this option, the message will continue to appear while the visitor navigates on the site and at the next visit / reload of the page by the visitor, until the visitor clicks on the button or the X', 'track-message');
+        $text = __('If you check this option, the message will continue to appear while the visitor navigates on the site and at the next visit / reload of the page by the visitor, until the visitor clicks on the button', 'track-message');
         $class = ('description');
         $type = ('checkbox');
         $value = ('1');
@@ -739,8 +755,10 @@ class TrackMessage{
         echo $html;
 
     }
+
+    // Selects if the message will appear only on first page
     public function firstPageCallback() {
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Message will appear just on the first page', 'track-message');
         $class = ('description');
         $type = ('checkbox');
         $value = ('1');
@@ -752,8 +770,10 @@ class TrackMessage{
         echo $html;
 
     }
+
+    // Selects the distance if you selected the message to close on Sroll
     public function scrollDistanceCallback() {
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Needed distance in pixels to close the message', 'track-message');
         $class = ('description');
         $type = ('number');
         $min = 1;
@@ -765,8 +785,9 @@ class TrackMessage{
         echo $html;
     }
 
+    // Selects how long will be the time for the cookie to stay in browser
     public function cookieTimeCallback() {
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Time that Cookie will live in browser', 'track-message');
         $class = ('description');
         $html = sprintf('<select name="%s">', esc_attr('tmssg_general_options[cookie_time]'));
         foreach($this->cookie_settings as $key => $value)
@@ -778,8 +799,9 @@ class TrackMessage{
         echo $html;  
     }
 
+    // The message that will show
     public function mssgFieldCallback() {
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Message that will appear in your website', 'track-message');
         $class = ('description');
         $style = ('width: 70%;');       
         $html = sprintf('<textarea name="%s" id="%s" style="%s"',esc_attr('tmssg_content_options[message_field]'), esc_attr('message_field'), esc_attr($style));
@@ -789,8 +811,9 @@ class TrackMessage{
         echo $html;
     }
 
+    // Select if you want a header
     public function selectHeaderFieldCallback(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('If you check the message will display a Header', 'track-message');
         $class = ('description');
         $type = ('checkbox');
         $value = ('1');
@@ -802,8 +825,9 @@ class TrackMessage{
         echo $html;
     }
 
+    // Header Text
     public function mssgHeaderFieldCallback(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('The text that will appear in Header', 'track-message');
         $class = ('description');
         $style = ('width: 25%;');       
         $html = sprintf('<textarea name="%s" id="%s" style="%s"',esc_attr('tmssg_content_options[message_header_field]'), esc_attr('message_header_field'), esc_attr($style));
@@ -813,8 +837,9 @@ class TrackMessage{
         echo $html;
     }
 
+    // External custom url for cookie policy
     public function policyUrlFieldCallback(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('External Cookie Policy Url', 'track-message');
         $class = ('description');
         $style = ('width: 35%;');       
         $html = sprintf('<textarea name="%s" id="%s" style="%s"',esc_attr('tmssg_content_options[policy_url]'), esc_attr('policy_url'), esc_attr($style));
@@ -827,7 +852,7 @@ class TrackMessage{
     // Cookie Policy Link Message
 
     public function policyLinkFieldCallback() {
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Text that describes Cookie Policy Url', 'track-message');
         $class = ('description');
         $style = ('width: 20%;');       
         $html = sprintf('<textarea name="%s" id="%s" style="%s"',esc_attr('tmssg_content_options[policy_link_field]'), esc_attr('policy_link_field'), esc_attr($style));
@@ -840,7 +865,7 @@ class TrackMessage{
     // CheckBox to show Cookie Policy Link
     
     public function selectPolicyLinkFieldCallback(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('If you check an url will appear to redirect visitors to your Cookie Policy Terms Page', 'track-message');
         $class = ('description');
         $type = ('checkbox');
         $value = ('1');
@@ -852,9 +877,10 @@ class TrackMessage{
         echo $html;
     }
 
+    // Select if you want to redirect to the Privacy Policy page of your wordpress website
     public function policyPageCallback(){
         $pages = get_pages();
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Select if you want to choose a page from your Wordpress Website as a Cookie Policy Page', 'track-message');
         $class = ('description');
 
         if ($pages){
@@ -869,8 +895,9 @@ class TrackMessage{
         }
     }
 
+    // Selects if you want to take your visitor to the same or new tab
     public function policyTabCallback(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Select if you want to take your visitor see your Policy Page on a New Tab or in the Same Tab', 'track-message');
         $class = ('description');
         $html = sprintf('<select name="%s">', esc_attr('tmssg_content_options[policy_tab_selector]'));
         foreach($this->policy_tab_selector_settings as $key => $value)
@@ -881,8 +908,10 @@ class TrackMessage{
         $html .= sprintf('<p class="%s">%s<p>', esc_attr($class), esc_html($text));
         echo $html;    
     }
+
+    // Selects the time that will appear on front-end
     public function mssgTimeCallback() {
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Time that message will appear', 'track-message');
         $class = ('description');
         $html = sprintf('<select name="%s">', esc_attr('tmssg_general_options[message_time]'));
         foreach($this->message_settings as $key => $value)
@@ -894,9 +923,9 @@ class TrackMessage{
         echo $html;    
     }
 
-
+    // Selects position of message in front-end
     public function positionOptionsCallback(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Selects the position for your message', 'track-message');
         $class = ('description');
         $html = sprintf('<select name="%s">', esc_attr('tmssg_styles_options[positions]'));
         foreach($this->position_settings as $key => $value)
@@ -909,7 +938,7 @@ class TrackMessage{
     }
 
     public function openView(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('The way that your message will appear', 'track-message');
         $class = ('description');
         $html = sprintf('<select name="%s">', esc_attr('tmssg_styles_options[open_view]'));
         foreach($this->open_view_settings as $key => $value)
@@ -922,7 +951,7 @@ class TrackMessage{
     }
 
     public function closeView(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('The way that your message will close', 'track-message');
         $class = ('description');
         $html = sprintf('<select name="%s">', esc_attr('tmssg_styles_options[close_view]'));
         foreach($this->close_view_settings as $key => $value)
@@ -934,8 +963,9 @@ class TrackMessage{
         echo $html;     
     }
 
+    // Aligns text
     public function textAlignSelector(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Align Text to the choosen way', 'track-message');
         $class = ('description');
         $html = sprintf('<select name="%s">', esc_attr('tmssg_styles_options[text_align]'));
         foreach($this->text_align_settings as $key => $value)
@@ -947,8 +977,9 @@ class TrackMessage{
         echo $html;          
     }
 
+    // Drop shadow effect for message
     public function dropShadowSelector(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('A drop shadow effect will affect the message container', 'track-message');
         $class = ('description');
         $type = ('checkbox');
         $value = ('1');
@@ -961,7 +992,7 @@ class TrackMessage{
     }
 
     public function roundedCornersSelector(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('The message will have rounded Corners', 'track-message');
         $class = ('description');
         $type = ('checkbox');
         $value = ('1');
@@ -982,7 +1013,7 @@ class TrackMessage{
        * Display our color field as a text input field.
        */
     public function colorInput(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Message Color', 'track-message');
         $class_paragraph = ('description');
         $color = ( isset($this->styles_options['color']) && $this->styles_options['color'] != "" ) ? sanitize_text_field($this->styles_options['color']) : '#000000';
         $class = ('TrackMessageNotification__content--edit-color');
@@ -994,7 +1025,7 @@ class TrackMessage{
 
 
     public function backgroundColorInput(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Background Message Color', 'track-message');
         $class_paragraph = ('description');
         $color = ( isset($this->styles_options['background_color']) && $this->styles_options['background_color'] != "" ) ? sanitize_text_field( $this->styles_options['background_color'] ) : '#ffffff';
         $class = ('TrackMessageNotification__content--edit-color');
@@ -1007,7 +1038,7 @@ class TrackMessage{
 
      // Button Color settings
     public function btnColorInput(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Button Color', 'track-message');
         $class_paragraph = ('description');
         $color = ( isset($this->styles_options['btn_color']) && $this->styles_options['btn_color'] != "" ) ? sanitize_text_field( $this->styles_options['btn_color'] ) : '#000000';
         $class = ('TrackMessageNotification__content--edit-color');
@@ -1020,7 +1051,7 @@ class TrackMessage{
 
 
     public function btnBackgroundColorInput(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Button Background Color', 'track-message');
         $class_paragraph = ('description');
         $color = ( isset($this->styles_options['background_btn_color']) && $this->styles_options['background_btn_color'] != "" ) ? sanitize_text_field( $this->styles_options['background_btn_color'] ) : '#ffffff';
         $class = ('TrackMessageNotification__content--edit-color');
@@ -1033,7 +1064,7 @@ class TrackMessage{
     }
 
     public function headerColorInput(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Header Color', 'track-message');
         $class_paragraph = ('description');
         $class = ('TrackMessageNotification__content--edit-color');
         $name = ('tmssg_styles_options[header_color]');
@@ -1045,7 +1076,7 @@ class TrackMessage{
     }
 
     public function urlColorInput(){
-        $text = __('Lorem ipsum the fuck out of you', 'track-message');
+        $text = __('Cookie Policy Url Color', 'track-message');
         $class_paragraph = ('description');
         $color = ( isset($this->styles_options['url_color']) && $this->styles_options['url_color'] != "" ) ? sanitize_text_field( $this->styles_options['url_color'] ) : '#317dbf';
         $class = ('TrackMessageNotification__content--edit-color');
