@@ -103,35 +103,40 @@
 
 .TrackMessageNotification {
     font-size: 14px;
-    padding: 0.5em 0 0.5em 0;
+    padding: 0.5em 0.5em 0.5em 0.5em;
     position: fixed;
-    text-align: center;
     margin: 0;
     z-index: 500;
     box-sizing: border-box;
     p{
         display: inline;
-        font-family: Helvetica;
+        font-family: Arial;
         padding-right: 0.4em;
         margin: 0;
+        font-size: 1.2em;
     }
     a{
         display: inline;
         font-family: Helvetica;
         padding-right: 0.6em;
+        font-size: 1.2em;
         margin: 0;
+        text-decoration: none;
+        &:hover{
+            text-decoration: underline;
+        }
     }
     .TrackMessageCookieNotification__inline--btn {
         border-radius: 2px;
         font-family: Arial;
         font-weight: bold;
-        font-size: 13px;
+        font-size: 1em;
         text-align: center;
         padding: 6px 8px 6px 8px;
         text-decoration: none;
         cursor: pointer;
         transition-duration: .3s;
-        display: inline;
+        display: inline-block;
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.19);
         &:hover {
             box-shadow: 0 16px 30px rgba(0,0,0,0.30), 0 10px 10px rgba(0,0,0,0.25);
@@ -139,12 +144,36 @@
     }
 }
 
+.TrackMessageNotification--drop-shadow{
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22), 0 -5px 28px rgba(0,0,0,0.25), 0 -10px 20px rgba(0,0,0,0.22);
+}
+
+.TrackMessageNotification--rounded-corners{
+    border-radius: 0.8em !important;
+}
+
+.TrackMessageNotification--text-center{
+    text-align: center !important;
+}
+
+.TrackMessageNotification--text-right{
+    text-align: right !important;
+}
+
+.TrackMessageNotification--text-left{
+    text-align: left !important;
+}
+
+.TrackMessageNotification--text-justify{
+    text-align: justify !important;
+}
+
+
 /** ---------------- HEADER (OPTIONAL) ------------------ */
 
 .TrackMessageCookieNotification__header{
     font-family: Verdana;
     font-weight: bold;
-    text-align: center;
     margin: 0;
 }
 /** ------------ FADE SLIDE EFFECT ------------------------------------------ */

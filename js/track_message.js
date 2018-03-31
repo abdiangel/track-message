@@ -12,17 +12,55 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
   }
 
+  // DropShadow
+
+  const dropShadowSelector = function(){
+    if ( phpValues.dropShadow == 1 ){
+      element.classList.add('TrackMessageNotification--drop-shadow')
+    }
+  }
+
+  // Text Align for text in message container
+
+  const textAligner = function(){
+    switch ( phpValues.textAlign ) {
+      case 'left':
+        element.classList.add('TrackMessageNotification--text-left');
+        break
+      case 'right':
+        element.classList.add('TrackMessageNotification--text-right');
+        break
+      case 'justify':
+        element.classList.add('TrackMessageNotification--text-justify');
+        break
+      default:
+      element.classList.add('TrackMessageNotification--text-center');
+    }
+
+  }
+
   // If the user checked the optional header this will display his custom header or default header
 
   const mssgHeader = function(){
     if (phpValues.mssgHeaderSelector == 1){
       var headerText = phpValues.mssgHeaderText;
-      var header = document.createElement("h5");
+      var headerColor = phpValues.headerColor;
+      var header = document.createElement("h1");
       header.setAttribute("class","TrackMessageCookieNotification__header");
+      header.setAttribute("style","color:" + headerColor + ";");
       var text = document.createTextNode(headerText);
       header.appendChild(text);
       element.insertBefore(header, element.childNodes[0]);
     }
+  }
+
+  // Rounded Corners for message container
+
+  const roundedCorners = function(){
+    if (phpValues.roundedCorners == 1){
+      element.classList.add('TrackMessageNotification--rounded-corners');
+    }
+
   }
 
   // Gives the necessary styles so the message looks elegant
@@ -185,6 +223,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     openTrackMssg();
     targetSelector();
     mssgHeader();
+    dropShadowSelector();
+    roundedCorners();
+    textAligner();
   }
   const loadSettings = function(){
     closeSettings();
